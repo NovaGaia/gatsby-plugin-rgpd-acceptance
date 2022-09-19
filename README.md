@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  gatsby-plugin-rgpd-cookie | Starter for a Gatsby Plugin
+  gatsby-plugin-rgpd-acceptance | Starter for a Gatsby Plugin
 </h1>
 
 A minimal boilerplate for the essential files Gatsby looks for in a plugin.
@@ -51,7 +51,7 @@ module.exports = {
     // ...
     require.resolve(`../my-plugin`),
   ],
-};
+}
 ```
 
 The line `require.resolve('../my-plugin')` is what accesses the plugin based on its filepath on your computer, and adds it as a plugin when Gatsby runs.

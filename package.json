@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-plugin-rgpd-cookie",
+  "name": "gatsby-plugin-rgpd-acceptance",
   "version": "1.0.0",
-  "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
+  "description": "A minimal plugin to add all tiers-scripts and accept them.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

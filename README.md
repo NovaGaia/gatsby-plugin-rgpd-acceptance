@@ -1,1 +1,0 @@
-# gatsby-plugin-rgpd-cookie

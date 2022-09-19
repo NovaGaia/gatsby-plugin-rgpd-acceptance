@@ -4,13 +4,15 @@
   "description": "A minimal plugin to add all tiers-scripts and accept them.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo \"No build script setup\""
+    "release": "release-it"
   },
   "keywords": [
     "gatsby",
     "gatsby-plugin"
   ],
   "author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
-  "license": "0BSD"
+  "license": "MIT",
+  "devDependencies": {
+    "release-it": "^15.4.2"
+  }
 }

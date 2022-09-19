@@ -1,0 +1,81 @@
+:root {
+  --bg-color: bisque;
+  --decol: 2rem;
+}
+
+.rgpd-acceptance-theme .rgpd--container {
+  position: sticky;
+  bottom: var(--decol);
+}
+.rgpd-acceptance-theme .rgpd--banner {
+  margin-left: var(--decol);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  background-color: var(--bg-color);
+  max-width: 500px;
+  box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
+}
+
+.rgpd-acceptance-theme .rgpd--title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.rgpd-acceptance-theme .rgpd--cookies-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.rgpd-acceptance-theme .rgpd--cookies-list > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
+}
+
+.rgpd-acceptance-theme .rgpd--cookies-list > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 0.3;
+  border-color: rgb(0 0 75 / var(--tw-divide-opacity));
+}
+
+.rgpd-acceptance-theme .rgpd--cookie-item {
+  display: grid;
+  list-style: none;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0px 0.5rem;
+}
+
+.rgpd-acceptance-theme .rgpd--cookie-name {
+  font-weight: 500;
+}
+
+.rgpd-acceptance-theme .rgpd--cookie-description {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.rgpd-acceptance-theme .rgpd--cookie-type {
+  text-align: center;
+}
+
+.rgpd-acceptance-theme .rgpd--cookie-checkzone {
+  text-align: end;
+}
+
+.rgpd-acceptance-theme .rgpd--footer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.rgpd-acceptance-theme .rgpd--btn {
+  border: 1px solid red;
+  border-radius: 0.3rem;
+  font-weight: 500;
+  background-color: white;
+  padding: 0rem 0.4rem;
+}

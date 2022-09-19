@@ -23,3 +23,5 @@ function setItemInLS(key, consent, mandatory) {
     localStorage.setItem(`rgpd-acceptance_${key}_consent`, consent)
   }
 }
+
+export { readItemInLS, removeItemInLS, setItemInLS, clearItemsInLS }

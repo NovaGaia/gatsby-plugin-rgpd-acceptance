@@ -12,17 +12,20 @@ import React from 'react'
 
 function load_js(element) {
   try {
-    const { key, scriptToInclude, mandatory, urlToCall } = element
+    const { key, scriptToInclude, url, mandatory, urlToCall } = element
     const consent = readCookieAcceptance(key)
     if (consent || mandatory) {
       const head = document.getElementsByTagName('head')[0]
       if (urlToCall) {
         const script = document.createElement('script')
         script.key = key
-        script.src = scriptToInclude
+        script.src = url
         head.appendChild(script)
       } else {
-        head.appendChild(scriptToInclude)
+        const parsedHTML = document
+          .createRange()
+          .createContextualFragment(scriptToInclude)
+        head.appendChild(parsedHTML)
       }
     }
   } catch (error) {

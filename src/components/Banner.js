@@ -7,6 +7,7 @@ import {
 } from '../utils/ls'
 
 const defaultsLabels = {
+  icon: `🍪`,
   titleBox: `Cookies Box`,
   descriptionBox: `Minim voluptate reprehenderit magna consequat do sit aliqua.`,
   acceptAllLabel: `Accepter tout`,
@@ -19,6 +20,7 @@ const defaultsLabels = {
 function Banner({ bannerConfig }) {
   const {
     labels: {
+      icon,
       titleBox,
       descriptionBox,
       acceptAllLabel,
@@ -51,14 +53,15 @@ function Banner({ bannerConfig }) {
     setChecked({ ...checked, ...updatedValue })
   }
 
-  function reload() {
-    if (window) window.location.reload()
-  }
-
   return (
     <div className="rgpd--container">
       <div className="rgpd--banner">
-        <div className="rgpd--title">{titleBox || defaultsLabels.titleBox}</div>
+        <div className="rgpd--header">
+          <div className="rgpd--icon">{icon || defaultsLabels.icon}</div>
+          <div className="rgpd--title">
+            {titleBox || defaultsLabels.titleBox}
+          </div>
+        </div>
         <div className="rgpd--content">
           {displayCookiesList ? (
             <div className="rgpd--cookies-list">

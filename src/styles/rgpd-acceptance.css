@@ -60,6 +60,10 @@
 .rgpd-acceptance-theme .rgpd--cookie-type {
   text-align: center;
 }
+.rgpd-acceptance-theme .rgpd--cookie-mandatory {
+  font-style: italic;
+  font-size: 0.9rem;
+}
 
 .rgpd-acceptance-theme .rgpd--cookie-checkzone {
   text-align: end;

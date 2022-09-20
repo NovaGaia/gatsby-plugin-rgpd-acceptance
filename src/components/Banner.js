@@ -13,31 +13,10 @@ const defaultsLabels = {
   rejectAllLabel: `Rejeter tout`,
   chooseLabel: `Choisir`,
   saveLabel: `Enregistrer`,
+  mandatoryLabel: `obligatoire`,
 }
 
 function Banner({ bannerConfig }) {
-  const [acceptedList, setAcceptedList] = useState([])
-
-  useEffect(() => {
-    console.log('acceptedList changed', acceptedList)
-    // write your callback function here
-  }, [acceptedList])
-  function setAcceptedCookie(key) {
-    // console.log('setAcceptedCookie key', key)
-    // console.log('acceptedList before', acceptedList)
-    const index = acceptedList.indexOf(key)
-    console.log('pos', index)
-    if (acceptedList.indexOf(key) === -1) {
-      const next_arr = [...acceptedList, key]
-      setAcceptedList(next_arr)
-    } else {
-      const next_arr = [
-        ...acceptedList.slice(0, index),
-        ...acceptedList.slice(index + 1),
-      ]
-      setAcceptedList(next_arr)
-    }
-  }
   const {
     labels: {
       titleBox,
@@ -46,10 +25,36 @@ function Banner({ bannerConfig }) {
       chooseLabel,
       rejectAllLabel,
       saveLabel,
+      mandatoryLabel,
     },
     cookiesList,
   } = bannerConfig
+
+  function tempChecked() {
+    const output = {}
+    cookiesList?.forEach(cookie => {
+      output[cookie.key] = readCookieAcceptance(cookiesList, cookie.key)
+    })
+    return output
+  }
+  const [checked, setChecked] = useState(tempChecked)
   const [displayCookiesList, setDisplayCookiesList] = useState(false)
+
+  useEffect(() => {
+    console.log('checked changed', checked)
+    // write your callback function here
+  }, [checked])
+
+  function setAcceptedCookie(key) {
+    const updatedValue = {}
+    updatedValue[key] = !checked[key]
+    setChecked({ ...checked, ...updatedValue })
+  }
+
+  function reload() {
+    if (window) window.location.reload()
+  }
+
   return (
     <div className="rgpd--container">
       <div className="rgpd--banner">
@@ -58,11 +63,21 @@ function Banner({ bannerConfig }) {
           {displayCookiesList ? (
             <div className="rgpd--cookies-list">
               {cookiesList.map((cookie, index) => {
-                const { publicName, publicDescription, key, type } = cookie
+                const { publicName, publicDescription, key, type, mandatory } =
+                  cookie
+
                 return (
                   <ul key={index} className="rgpd--cookie-item">
                     <li>
-                      <div className="rgpd--cookie-name">{publicName}</div>
+                      <div className="rgpd--cookie-name">
+                        {publicName}
+                        {mandatory && (
+                          <span className="rgpd--cookie-mandatory">
+                            {' '}
+                            ({mandatoryLabel || defaultsLabels.mandatoryLabel})
+                          </span>
+                        )}
+                      </div>
                       <div className="rgpd--cookie-description">
                         {publicDescription}
                       </div>
@@ -71,7 +86,9 @@ function Banner({ bannerConfig }) {
                     <li className="rgpd--cookie-checkzone">
                       <input
                         type={`checkbox`}
-                        checked={readCookieAcceptance(cookiesList, key)}
+                        name={key}
+                        disabled={mandatory === true}
+                        checked={checked[key]}
                         onChange={e => {
                           setAcceptedCookie(key)
                         }}
@@ -116,7 +133,7 @@ function Banner({ bannerConfig }) {
             <button
               className="rgpd--btn"
               onClick={() => {
-                acceptSomeCookies(cookiesList, acceptedList)
+                acceptSomeCookies(cookiesList, checked)
               }}
             >
               {saveLabel || defaultsLabels.saveLabel}

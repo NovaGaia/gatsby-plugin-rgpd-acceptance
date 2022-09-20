@@ -25,8 +25,8 @@ function setItemInLS(key, consent, mandatory) {
 }
 
 function acceptAllCookies(cookiesList) {
-  console.log('acceptAllCookies')
-  console.log('cookiesList', cookiesList)
+  // console.log('acceptAllCookies')
+  // console.log('cookiesList', cookiesList)
   cookiesList.forEach(element => {
     setItemInLS(element.key, true, element.mandatory)
   })
@@ -34,18 +34,28 @@ function acceptAllCookies(cookiesList) {
 }
 
 function acceptNoCookies(cookiesList) {
-  console.log('acceptNoCookies')
-  console.log('cookiesList', cookiesList)
+  // console.log('acceptNoCookies')
+  // console.log('cookiesList', cookiesList)
   cookiesList.forEach(element => {
     setItemInLS(element.key, false, element.mandatory)
   })
   setAcceptanceDate()
 }
 
-function acceptSomeCookies(cookiesList, acceptedList) {
-  console.log('acceptSomeCookies')
-  console.log('cookiesList', cookiesList)
-  console.log('acceptedList', acceptedList)
+function acceptSomeCookies(cookiesList, checked) {
+  // console.log('acceptSomeCookies')
+  // console.log('cookiesList', cookiesList)
+  // console.log('checked', checked)
+  cookiesList.forEach(element => {
+    if (element.mandatory) {
+      localStorage.setItem(`rgpd-acceptance_${element.key}_mandatory`, true)
+    } else {
+      localStorage.setItem(
+        `rgpd-acceptance_${element.key}_consent`,
+        checked[element.key]
+      )
+    }
+  })
   // TODO
   setAcceptanceDate()
 }
@@ -59,25 +69,35 @@ function resetAllAcceptanceByDate(cookiesList, cookieDuration) {
 }
 
 function readCookieAcceptance(cookiesList, key) {
+  let output = false
   if (cookiesList === undefined || key === undefined) {
-    return false
+    return output
   }
-  console.log('readCookieAcceptance')
-  console.log('cookiesList', cookiesList)
-  console.log('key', key)
+  // console.log('readCookieAcceptance')
+  // console.log('cookiesList', cookiesList)
   cookiesList.forEach(element => {
-    console.log('key', element.key)
-    console.log('mandatory', element.mandatory)
-    console.log('value in LS', readItemInLS(key))
-    if (element.key === key && element.mandatory) {
-      console.log('is mandatory')
-      return true
-    } else if (element.key === key) {
-      console.log('not mandatory')
-      return readItemInLS(key) || false
+    if (element.key === key) {
+      if (element.mandatory) {
+        // console.log('key', element.key)
+        // console.log(
+        //   'value in LS',
+        //   readItemInLS(`rgpd-acceptance_${key}_mandatory`)
+        // )
+        // console.log('is mandatory')
+        output = true
+      } else {
+        // console.log('key', element.key)
+        // console.log('not mandatory')
+        // console.log(
+        //   'value in LS',
+        //   readItemInLS(`rgpd-acceptance_${key}_consent`)
+        // )
+        output = readItemInLS(`rgpd-acceptance_${key}_consent`) === 'true'
+      }
+      return
     }
   })
-  return false
+  return output
 }
 
 function setAcceptanceDate() {

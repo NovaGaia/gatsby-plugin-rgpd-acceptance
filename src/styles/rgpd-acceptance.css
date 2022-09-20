@@ -38,7 +38,7 @@
 }
 
 .rgpd-acceptance-theme .rgpd--cookies-list > :not([hidden]) ~ :not([hidden]) {
-  --tw-divide-opacity: 0.3;
+  --tw-divide-opacity: 0.1;
   border-color: rgb(0 0 75 / var(--tw-divide-opacity));
 }
 

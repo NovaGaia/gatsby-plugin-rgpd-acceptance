@@ -5,41 +5,41 @@
  */
 import './src/styles/rgpd-acceptance.css'
 
-import React, { useState } from 'react'
-import {
-  clearItemsInLS,
-  readItemInLS,
-  removeItemInLS,
-  setItemInLS,
-} from './src/utils/ls'
+import { readCookieAcceptance, resetAllAcceptanceByDate } from './src/utils/ls'
 
 import Banner from './src/components/Banner'
+import React from 'react'
 
-function load_js(element, consent = false) {
+function load_js(element) {
   try {
-    const { key, scriptToInclude, mandatory } = element
+    const { key, scriptToInclude, mandatory, urlToCall } = element
+    const consent = readCookieAcceptance(key)
     if (consent || mandatory) {
       const head = document.getElementsByTagName('head')[0]
-      const script = document.createElement('script')
-      script.key = key
-      script.src = scriptToInclude
-      //   head.appendChild(script)
+      if (urlToCall) {
+        const script = document.createElement('script')
+        script.key = key
+        script.src = scriptToInclude
+        head.appendChild(script)
+      } else {
+        head.appendChild(scriptToInclude)
+      }
     }
   } catch (error) {
     console.error(error)
   }
-  //   removeItemInLS(key, mandatory) // <-- Pas ici
-  //   setItemInLS(key, consent, mandatory) // <-- Pas ici
 }
 
 function doThings(src, pluginOptions) {
-  localStorage.setItem('rgpd-acceptance_accept-date', new Date())
-  console.log(`rgpd-acceptance launched by ${src}`, pluginOptions)
+  resetAllAcceptanceByDate(
+    pluginOptions.cookiesList,
+    pluginOptions.cookieDuration
+  )
   if (pluginOptions.useInternalCss !== undefined) {
     document.documentElement.classList.add('rgpd-acceptance-theme')
   }
   pluginOptions.cookiesList.forEach(element => {
-    load_js(element, true)
+    load_js(element)
   })
 }
 
@@ -49,14 +49,13 @@ export const onRouteUpdate = ({ location }, pluginOptions = {}) => {
   return null
 }
 
+export function onInitialClientRender(_, pluginOptions) {
+  doThings(`onRouteUpdate`, pluginOptions)
+}
+
 export const wrapRootElement = ({ element }, pluginOptions) => (
   <>
     {element}
     <Banner bannerConfig={pluginOptions} />
   </>
 )
-
-export function onInitialClientRender(_, pluginOptions) {
-  //   clearItemsInLS() // <-- Pas ici
-  doThings(`onRouteUpdate`, pluginOptions)
-}

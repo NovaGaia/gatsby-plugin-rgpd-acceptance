@@ -37,7 +37,7 @@ function initRGPDPlugins(src, pluginOptions) {
     pluginOptions.cookiesList,
     pluginOptions.cookieDuration
   )
-  if (pluginOptions.useInternalCss !== undefined) {
+  if (pluginOptions.useInternalCss) {
     document.documentElement.classList.add('rgpd-acceptance-theme')
   }
   pluginOptions.cookiesList.forEach(element => {

@@ -163,6 +163,17 @@ If you set `useInternalCss` a `rgpd-acceptance-theme` class is added to `<html>`
 
 ### Component `RGPDBlocker`
 
+```comment
+/**
+ * A component to block the loading of an unaccepted third party script.
+ * @param {*} cookieKey `String` **Required**, your internal key, same as configured in `gatsby-config.js`
+ * @param {*} className `String` Optionnal, your style (set width and height)
+ * @param {*} blockerWarnMessage `String` Optionnal, the label of the localy acceptance button
+ * @param {*} blockerWarnLabel `String` Optionnal, the warning message.
+ * @returns
+ */
+```
+
 ## How to contribute
 
 You can make enhancement requests, report bugs, or simply offer help at https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance/issues

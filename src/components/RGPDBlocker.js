@@ -7,6 +7,14 @@ import {
 
 import React from 'react'
 
+/**
+ * A component to block the loading of an unaccepted third party script.
+ * @param {*} cookieKey `String` **Required**, your internal key, same as configured in `gatsby-config.js`
+ * @param {*} className `String` Optionnal, your style (set width and height)
+ * @param {*} blockerWarnMessage `String` Optionnal, the label of the localy acceptance button
+ * @param {*} blockerWarnLabel `String` Optionnal, the warning message.
+ * @returns
+ */
 function RGPDBlocker({
   cookieKey,
   children,
@@ -14,6 +22,13 @@ function RGPDBlocker({
   blockerWarnMessage,
   blockerWarnLabel,
 }) {
+  if (cookieKey === undefined || cookieKey === null) {
+    return (
+      <div style={{ color: red }}>
+        Set the <code>cookieKey</code> is <b>mandatory</b>.
+      </div>
+    )
+  }
   const data = useStaticQuery(graphql`
     query {
       sitePlugin(name: { eq: "gatsby-plugin-rgpd-acceptance" }) {

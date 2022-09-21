@@ -150,7 +150,7 @@ function InternalBanner({
 }
 
 /**
- *
+ * The acceptance pilot
  * @param {*} icon `String` Emoji Override plugin or config label (eg. for i18n).
  * @param {*} titleBanner `String` Override plugin or config label (eg. for i18n).
  * @param {*} descriptionBanner `String` Override plugin or config label (eg. for i18n).

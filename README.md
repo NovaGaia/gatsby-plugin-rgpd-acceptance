@@ -1,113 +1,168 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  gatsby-plugin-rgpd-acceptance | Starter for a Gatsby Plugin
-</h1>
+# gatsby-plugin-rgpd-acceptance
 
-A minimal boilerplate for the essential files Gatsby looks for in a plugin.
+## Description
 
-## 🚀 Quick start
+Another plugin to manage third party scripts, respecting the GDPR.
 
-To get started creating a new plugin, you can follow these steps:
+You can upload complete scripts or just script urls.
 
-1. Initialize a new plugin from the starter with `gatsby new`
+Two components are provided:
 
-```shell
-gatsby new my-plugin https://github.com/gatsbyjs/gatsby-starter-plugin
-```
+- `Banner` which is used to display and manage the acceptance.
+- `RGPDBlocker` which is used to prevent the loading of code (e.g. YouTube iframe, navgation map, playlist, etc.) if the person has not explicitly given his consent.
 
-If you already have a Gatsby site, you can use it. Otherwise, you can [create a new Gatsby site](https://www.gatsbyjs.com/tutorial/part-0/#create-a-gatsby-site) to test your plugin.
+Two modes are proposed, one where the banner component is automatically added and a manual mode where you have to add it yourself.
 
-Your directory structure will look similar to this:
+To use the manual mode, it in the `gatsby-config.js` plugin options. Change the value of `useInternalComponent` to `false`.
 
-```text
-/my-gatsby-site
-├── gatsby-config.js
-└── /src
-    └── /pages
-        └── /index.js
-/my-plugin
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── package.json
-└── README.md
-```
+## How to install
 
-With `my-gatsby-site` being your Gatsby site, and `my-plugin` being your plugin. You could also include the plugin in your [site's `plugins` folder](https://www.gatsbyjs.com/docs/loading-plugins-from-your-local-plugins-folder/).
+`npm i gatsby-plugin-rgpd-acceptance`
 
-2. Include the plugin in a Gatsby site
-
-Inside of the `gatsby-config.js` file of your site (in this case, `my-gatsby-site`), include the plugin in the `plugins` array:
+## How to use
 
 ```javascript
+// In your gatsby-config.js
 module.exports = {
   plugins: [
-    // other gatsby plugins
-    // ...
-    require.resolve(`../my-plugin`),
+    {
+      resolve: `./plugins/gatsby-plugin-rgpd-acceptance`,
+      options: {
+        cookieDuration: 31557600000, // Optionnal, default value: one year in milliseconds
+        useInternalCss: true, // Boolean Optionnal, default value: true
+        useInternalComponent: true, // Boolean Optionnal, default value: true
+        labels: {
+          icon: `🍪`, // Optionnal, default value: 🍪 an emoji
+          titleBanner: `Les cookies`, // Optionnal, default value: Les cookies
+          descriptionBanner: `Nous utilisons des cookies [...]`, // Optionnal, default value: (see below)
+          acceptAllLabel: `Accepter tout`, // Optionnal, default value: Accepter tout
+          rejectAllLabel: `Rejeter tout`, // Optionnal, default value: Rejeter tout
+          chooseLabel: `Choisir`, // Optionnal
+          saveLabel: `Enregistrer`, // Optionnal
+          mandatoryLabel: `obligatoire`, // Optionnal
+          blockerWarnLabel: `Accepter`, // Optionnal
+          blockerWarnMessage: `Vous n'avez pas accepté les cookies globalement ou celui-ci précisement.<br/> Pour afficher ce contenu, vous devez accepter.`, // Optionnal
+        },
+        cookiesList: [
+          // At least one is required (otherwise, what is the point of installing this plugin).
+          {
+            key: `google-analitics`, // Required, your internal key
+            publicName: `Google Analytics`, // Required, a Firendly Name
+            publicDescription: `GA Description`, // Required, a Firendly Description
+            type: `analytic`, // Required, a type/usage of script, chose one of them `ads|analytic|api|comment|other|social|support|video`
+            mandatory: false, // Boolean Required, set if this script is mandatory
+            urlToCall: `https://test.io`, // Optional (otherwise, enter `scriptToInclude`), the url of your script.
+          },
+          {
+            key: `youtube`, // Required, your internal key
+            publicName: `YouTube`, // Required, a Firendly Name
+            publicDescription: `YT Description`, // Required, a Firendly Description
+            type: `video`, // Required, a type/usage of script, chose one of them `ads|analytic|api|comment|other|social|support|video`
+            mandatory: true, // Boolean Required, set if this script is mandatory
+            scriptToInclude: `<script>console.info('Testing script is loaded')</script>`, // Optional (otherwise, enter `urlToCall`), the url of your script.
+          },
+        ],
+      },
+    },
   ],
 }
 ```
 
-The line `require.resolve('../my-plugin')` is what accesses the plugin based on its filepath on your computer, and adds it as a plugin when Gatsby runs.
+> **`descriptionBanner` default value:**  
+> Nous utilisons des cookies et des technologies similaires sur notre site web et traitons vos données personnelles (par exemple, l'adresse IP), par exemple, pour personnaliser le contenu et les annonces, pour intégrer des médias de fournisseurs tiers ou pour analyser le trafic sur notre site web.&lt;br/> Le traitement des données peut également se produire à la suite de la mise en place de cookies. Nous partageons ces données avec des tiers que nous nommons dans les paramètres de confidentialité. Le traitement des données peut avoir lieu avec votre consentement ou sur la base d'un intérêt légitime, auquel vous pouvez vous opposer dans les paramètres de confidentialité. Vous avez le droit de ne pas consentir et de modifier ou révoquer votre consentement ultérieurement. Pour plus d'informations sur l'utilisation de vos données, veuillez consulter notre politique de confidentialité.
 
-_You can use this method to test and develop your plugin before you publish it to a package registry like npm. Once published, you would instead install it and [add the plugin name to the array](https://www.gatsbyjs.com/docs/using-a-plugin-in-your-site/). You can read about other ways to connect your plugin to your site including using `npm link` or `yarn workspaces` in the [doc on creating local plugins](https://www.gatsbyjs.com/docs/creating-a-local-plugin/#developing-a-local-plugin-that-is-outside-your-project)._
+> **`blockerWarnMessage` default value:**  
+> Vous n'avez pas accepté les cookies globalement ou celui-ci précisement.&lt;br/> Pour afficher ce contenu, vous devez accepter.
 
-3. Verify the plugin was added correctly
+## Available options
 
-The plugin added by the starter implements a single Gatsby API in the `gatsby-node` that logs a message to the console. When you run `gatsby develop` or `gatsby build` in the site that implements your plugin, you should see this message.
+### Design
 
-You can verify your plugin was added to your site correctly by running `gatsby develop` for the site.
+The design is intentionally horrible. So you can/should adapt it by disabling it in the `gatsby-config.js` plugin options. Change the value of `useInternalCss` to false
 
-You should now see a message logged to the console in the preinit phase of the Gatsby build process:
+Here are the css classes (the names speak for themselves)
 
-```shell
-$ gatsby develop
-success open and validate gatsby-configs - 0.033s
-success load plugins - 0.074s
-Loaded gatsby-starter-plugin
-success onPreInit - 0.016s
-...
+If you set `useInternalCss` a `rgpd-acceptance-theme` class is added to `<html>`. So you don't need to put `!important` to override the predefined styles.
+
+```css
+/* Banner and Banner-mini component */
+.rgpd--container 
+
+.rgpd--banner 
+
+.rgpd--banner.full 
+
+.rgpd--banner.mini 
+
+.rgpd--container .rgpd--banner 
+
+.rgpd--header 
+
+.rgpd--icon 
+
+.rgpd--title 
+
+.rgpd--cookies-list
+
+.rgpd--cookie-item 
+
+.rgpd--cookie-name 
+
+.rgpd--cookie-description 
+
+.rgpd--cookie-type 
+
+.rgpd--cookie-mandatory 
+
+.rgpd--cookie-checkzone 
+
+.rgpd--footer 
+
+.rgpd--btn 
+
+.rgpd--btn.all 
+
+.rgpd--btn.some 
+
+.rgpd--btn.none 
+
+.rgpd--btn.choose 
+
+.rgpd--btn.save 
+
+.rgpd--link 
+
+/* RGPDBlocker component */
+
+.rgpd--blocker--container 
+
+.rgpd--blocker--container .rgpd--icon 
+
+.rgpd--blocker--title 
+
+.rgpd--blocker--warn-message;
 ```
 
-4. Rename the plugin in the `package.json`
+### Component `Banner`
 
-When you clone the site, the information in the `package.json` will need to be updated. Name your plugin based off of [Gatsby's conventions for naming plugins](https://www.gatsbyjs.com/docs/naming-a-plugin/).
-
-## 🧐 What's inside?
-
-This starter generates the [files Gatsby looks for in plugins](https://www.gatsbyjs.com/docs/files-gatsby-looks-for-in-a-plugin/).
-
-```text
-/my-plugin
-├── .gitignore
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── LICENSE
-├── package.json
-└── README.md
+```comment
+/**
+ * The pilot of acceptance
+ * @param {*} icon `String` Emoji Override plugin or config label (eg. for i18n).
+ * @param {*} titleBanner `String` Override plugin or config label (eg. for i18n).
+ * @param {*} descriptionBanner `String` Override plugin or config label (eg. for i18n).
+ * @param {*} acceptAllLabel `String` Override plugin or config label (eg. for i18n).
+ * @param {*} chooseLabel `String` Override plugin or config label (eg. for i18n).
+ * @param {*} rejectAllLabel `String` Override plugin or config label (eg. for i18n).
+ * @param {*} saveLabel `String` Override plugin or config label (eg. for i18n).
+ * @param {*} mandatoryLabel `String` Override plugin or config label (eg. for i18n).
+ * @param {*} asAContainer `Boolean` Add a container with `rgpd--container` classname.
+ * @returns
+ */
 ```
 
-- **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-- **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-- **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-- **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-- **`index.js`**: A file that will be loaded by default when the plugin is [required by another application](https://docs.npmjs.com/creating-node-js-modules#create-the-file-that-will-be-loaded-when-your-module-is-required-by-another-application0). You can adjust what file is used by updating the `main` field of the `package.json`.
-- **`LICENSE`**: This plugin starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-- **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the plugin's name, author, etc). This manifest is how npm knows which packages to install for your project.
-- **`README.md`**: A text file containing useful reference information about your plugin.
+### Component `RGPDBlocker`
 
-## 🎓 Learning Gatsby
+## How to contribute
 
-If you're looking for more guidance on plugins, how they work, or what their role is in the Gatsby ecosystem, check out some of these resources:
-
-- The [Creating Plugins](https://www.gatsbyjs.com/docs/creating-plugins/) section of the docs has information on authoring and maintaining plugins yourself.
-- The conceptual guide on [Plugins, Themes, and Starters](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/) compares and contrasts plugins with other pieces of the Gatsby ecosystem. It can also help you [decide what to choose between a plugin, starter, or theme](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/#deciding-which-to-use).
-- The [Gatsby plugin library](https://www.gatsbyjs.com/plugins/) has over 1750 official as well as community developed plugins that can get you up and running faster and borrow ideas from.
+You can make enhancement requests, report bugs, or simply offer help at https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance/issues

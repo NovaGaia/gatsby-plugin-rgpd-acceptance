@@ -5,32 +5,36 @@ import {
   acceptSomeCookies,
   readCookieAcceptance,
 } from '../utils/ls'
+import { graphql, useStaticQuery } from 'gatsby'
 
-const defaultsLabels = {
-  icon: `🍪`,
-  titleBanner: `Cookies Box`,
-  descriptionBanner: `Minim voluptate reprehenderit magna consequat do sit aliqua.`,
-  acceptAllLabel: `Accepter tout`,
-  rejectAllLabel: `Rejeter tout`,
-  chooseLabel: `Choisir`,
-  saveLabel: `Enregistrer`,
-  mandatoryLabel: `obligatoire`,
-}
+function Banner({
+  icon,
+  titleBanner,
+  descriptionBanner,
+  acceptAllLabel,
+  chooseLabel,
+  rejectAllLabel,
+  saveLabel,
+  mandatoryLabel,
+  automaticlyInclude = false,
+}) {
+  const data = useStaticQuery(graphql`
+    query {
+      sitePlugin(name: { eq: "gatsby-plugin-rgpd-acceptance" }) {
+        pluginOptions
+      }
+    }
+  `)
+  const { labels: confLabels, cookiesList } = data.sitePlugin.pluginOptions
 
-function Banner({ bannerConfig }) {
-  const {
-    labels: {
-      icon,
-      titleBanner,
-      descriptionBanner,
-      acceptAllLabel,
-      chooseLabel,
-      rejectAllLabel,
-      saveLabel,
-      mandatoryLabel,
-    },
-    cookiesList,
-  } = bannerConfig
+  const _icon = icon || confLabels.icon
+  const _titleBanner = titleBanner || confLabels.titleBanner
+  const _descriptionBanner = descriptionBanner || confLabels.descriptionBanner
+  const _acceptAllLabel = acceptAllLabel || confLabels.acceptAllLabel
+  const _chooseLabel = chooseLabel || confLabels.chooseLabel
+  const _rejectAllLabel = rejectAllLabel || confLabels.rejectAllLabel
+  const _saveLabel = saveLabel || confLabels.saveLabel
+  const _mandatoryLabel = mandatoryLabel || confLabels.mandatoryLabel
 
   function tempChecked() {
     const output = {}
@@ -43,7 +47,7 @@ function Banner({ bannerConfig }) {
   const [displayCookiesList, setDisplayCookiesList] = useState(false)
 
   useEffect(() => {
-    console.log('checked changed', checked)
+    // console.log('checked changed', checked)
     // write your callback function here
   }, [checked])
 
@@ -54,12 +58,14 @@ function Banner({ bannerConfig }) {
   }
 
   return (
-    <div className="rgpd--banner">
+    <div
+      className={`rgpd--banner${
+        automaticlyInclude ? ' automaticly-include' : ''
+      }`}
+    >
       <div className="rgpd--header">
-        <div className="rgpd--icon">{icon || defaultsLabels.icon}</div>
-        <div className="rgpd--title">
-          {titleBanner || defaultsLabels.titleBanner}
-        </div>
+        <div className="rgpd--icon">{_icon}</div>
+        <div className="rgpd--title">{_titleBanner}</div>
       </div>
       <div className="rgpd--content">
         {displayCookiesList ? (
@@ -76,7 +82,7 @@ function Banner({ bannerConfig }) {
                       {mandatory && (
                         <span className="rgpd--cookie-mandatory">
                           {' '}
-                          ({mandatoryLabel || defaultsLabels.mandatoryLabel})
+                          ({_mandatoryLabel})
                         </span>
                       )}
                     </div>
@@ -101,7 +107,7 @@ function Banner({ bannerConfig }) {
             })}
           </div>
         ) : (
-          <p dangerouslySetInnerHTML={{ __html: descriptionBanner }}></p>
+          <p dangerouslySetInnerHTML={{ __html: _descriptionBanner }}></p>
         )}
       </div>
       <div className="rgpd--footer">
@@ -112,7 +118,7 @@ function Banner({ bannerConfig }) {
               setDisplayCookiesList(!displayCookiesList)
             }}
           >
-            {chooseLabel || defaultsLabels.chooseLabel}
+            {_chooseLabel}
           </button>
         )}
         <button
@@ -121,7 +127,7 @@ function Banner({ bannerConfig }) {
             acceptAllCookies(cookiesList)
           }}
         >
-          {acceptAllLabel || defaultsLabels.acceptAllLabel}
+          {_acceptAllLabel}
         </button>
         <button
           className="rgpd--btn"
@@ -129,7 +135,7 @@ function Banner({ bannerConfig }) {
             acceptNoCookies(cookiesList)
           }}
         >
-          {rejectAllLabel || defaultsLabels.rejectAllLabel}
+          {_rejectAllLabel}
         </button>
         {displayCookiesList && (
           <button
@@ -138,7 +144,7 @@ function Banner({ bannerConfig }) {
               acceptSomeCookies(cookiesList, checked)
             }}
           >
-            {saveLabel || defaultsLabels.saveLabel}
+            {_saveLabel}
           </button>
         )}
       </div>

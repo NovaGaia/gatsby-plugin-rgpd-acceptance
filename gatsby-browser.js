@@ -23,9 +23,7 @@ export const wrapRootElement = ({ element }, pluginOptions) => (
   <>
     {element}
     <div className="rgpd--container">
-      {pluginOptions?.useInternalComponent && (
-        <Banner bannerConfig={pluginOptions} />
-      )}
+      {pluginOptions?.useInternalComponent && <Banner automaticlyInclude />}
     </div>
   </>
 )

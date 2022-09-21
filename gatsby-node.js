@@ -58,8 +58,18 @@ exports.pluginOptionsSchema = ({ Joi }) => {
         .default('Enregistrer'),
       mandatoryLabel: Joi.string()
         .optional()
-        .description('mandatoryLabel alert')
+        .description('mandatoryLabel alert.')
         .default('obligatoire'),
+      blockerWarnLabel: Joi.string()
+        .optional()
+        .description('Valid acceptance label button in RGPDBlocker Component.')
+        .default('Accepter'),
+      blockerWarnMessage: Joi.string()
+        .optional()
+        .description('Warning message in RGPDBlocker Component.')
+        .default(
+          `Vous n'avez pas accepté les cookies globalement ou celui-ci précisement.<br/> Pour afficher ce contenu, vous devez accepter.`
+        ),
     }),
     cookiesList: Joi.array()
       .items(

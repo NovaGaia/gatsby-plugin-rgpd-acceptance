@@ -77,6 +77,10 @@ function _setItemInLS(key, consent, mandatory) {
 
 // Externals functions
 
+/**
+ * Get acceptance status.
+ * @returns Boolean
+ */
 function hasValidatedAcceptance() {
   const dt = _getAcceptanceDate()
   return dt !== null
@@ -162,7 +166,9 @@ function resetAllAcceptanceByDate(cookiesList, cookieDuration) {
   if (acceptanceDate === 0) return
   const diff = now - acceptanceDate
   if (diff > cookieDuration) {
-    console.info(`Cookies are perimed, reset to ask consent again.`)
+    console.info(
+      `The cookies have expired, they have been reset to ask for consent again.`
+    )
     resetAll(cookiesList)
   }
 }
@@ -205,6 +211,21 @@ function readCookieAcceptance(cookiesList, key) {
   return output
 }
 
+/**
+ * Accept one cookie
+ * @param {*} key
+ */
+function simplyAcceptOneCookie(key) {
+  localStorage.setItem(`rgpd-acceptance_${key}_consent`, true)
+  _setAcceptanceDate()
+  _reload()
+}
+function simplyReadOneCookie(key, mandatory) {
+  return localStorage.getItem(
+    `rgpd-acceptance_${key}_${mandatory ? 'mandatory' : 'consent'}`
+  )
+}
+
 export {
   acceptAllCookies,
   acceptNoCookies,
@@ -213,4 +234,6 @@ export {
   resetAllAcceptanceByDate,
   resetAll,
   hasValidatedAcceptance,
+  simplyAcceptOneCookie,
+  simplyReadOneCookie,
 }

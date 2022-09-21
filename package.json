@@ -6,12 +6,20 @@
   "scripts": {
     "release": "release-it"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance.git"
+  },
   "keywords": [
     "gatsby",
-    "gatsby-plugin"
+    "gatsby-plugin","RGPD"
   ],
   "author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance/issues"
+  },
+  "homepage": "https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance#readme",
   "devDependencies": {
     "auto-changelog": "^2.4.0",
     "release-it": "^15.4.2"

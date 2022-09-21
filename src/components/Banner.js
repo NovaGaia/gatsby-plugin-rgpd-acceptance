@@ -41,13 +41,12 @@ function InternalBanner({
     setChecked({ ...checked, ...updatedValue })
   }
 
-  console.log('showMiniBanner', showMiniBanner)
   if (showMiniBanner) {
     return (
       <div className="rgpd--banner mini">
         <div className="rgpd--icon">{icon}</div>
         <button
-          className="rgpd--btn"
+          className="rgpd--link choose"
           onClick={() => {
             setShowMiniBanner(false)
           }}
@@ -82,9 +81,10 @@ function InternalBanner({
                           </span>
                         )}
                       </div>
-                      <div className="rgpd--cookie-description">
-                        {publicDescription}
-                      </div>
+                      <p
+                        className="rgpd--cookie-description"
+                        dangerouslySetInnerHTML={{ __html: publicDescription }}
+                      />
                     </li>
                     <li className="rgpd--cookie-type">{type}</li>
                     <li className="rgpd--cookie-checkzone">
@@ -103,13 +103,13 @@ function InternalBanner({
               })}
             </div>
           ) : (
-            <p dangerouslySetInnerHTML={{ __html: descriptionBanner }}></p>
+            <p dangerouslySetInnerHTML={{ __html: descriptionBanner }} />
           )}
         </div>
         <div className="rgpd--footer">
           {!displayCookiesList && (
             <button
-              className="rgpd--btn"
+              className="rgpd--btn choose"
               onClick={() => {
                 setDisplayCookiesList(!displayCookiesList)
               }}
@@ -118,7 +118,7 @@ function InternalBanner({
             </button>
           )}
           <button
-            className="rgpd--btn"
+            className="rgpd--btn all"
             onClick={() => {
               acceptAllCookies(cookiesList)
             }}
@@ -126,7 +126,7 @@ function InternalBanner({
             {acceptAllLabel}
           </button>
           <button
-            className="rgpd--btn"
+            className="rgpd--btn none"
             onClick={() => {
               acceptNoCookies(cookiesList)
             }}
@@ -135,7 +135,7 @@ function InternalBanner({
           </button>
           {displayCookiesList && (
             <button
-              className="rgpd--btn"
+              className="rgpd--btn save"
               onClick={() => {
                 acceptSomeCookies(cookiesList, checked)
               }}

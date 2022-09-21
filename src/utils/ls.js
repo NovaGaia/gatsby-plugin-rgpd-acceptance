@@ -77,6 +77,11 @@ function _setItemInLS(key, consent, mandatory) {
 
 // Externals functions
 
+function hasValidatedAcceptance() {
+  const dt = _getAcceptanceDate()
+  return dt !== null
+}
+
 /**
  * Reset All datas in LS.
  * @param {*} cookiesList
@@ -207,4 +212,5 @@ export {
   readCookieAcceptance,
   resetAllAcceptanceByDate,
   resetAll,
+  hasValidatedAcceptance,
 }

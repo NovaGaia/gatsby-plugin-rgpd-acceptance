@@ -18,10 +18,16 @@
   gap: 0.5rem;
   border-radius: 1rem;
   background-color: var(--bg-color);
-  max-width: 500px;
   box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 13px 11px -5px rgba(0, 0, 0, 0.75);
+}
+.rgpd-acceptance-theme .rgpd--banner.full {
+  max-width: 500px;
+}
+.rgpd-acceptance-theme .rgpd--banner.mini {
+  max-width: 80px;
+  align-items: center;
 }
 
 .rgpd-acceptance-theme .rgpd--container .rgpd--banner {

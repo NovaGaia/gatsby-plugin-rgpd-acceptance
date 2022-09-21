@@ -3,6 +3,7 @@ import {
   acceptAllCookies,
   acceptNoCookies,
   acceptSomeCookies,
+  hasValidatedAcceptance,
   readCookieAcceptance,
 } from '../utils/ls'
 import { graphql, useStaticQuery } from 'gatsby'
@@ -17,7 +18,6 @@ function InternalBanner({
   saveLabel,
   mandatoryLabel,
   cookiesList,
-  automaticlyInclude,
 }) {
   function tempChecked() {
     const output = {}
@@ -28,6 +28,7 @@ function InternalBanner({
   }
   const [checked, setChecked] = useState(tempChecked)
   const [displayCookiesList, setDisplayCookiesList] = useState(false)
+  const [showMiniBanner, setShowMiniBanner] = useState(hasValidatedAcceptance())
 
   useEffect(() => {
     // console.log('checked changed', checked)
@@ -40,95 +41,112 @@ function InternalBanner({
     setChecked({ ...checked, ...updatedValue })
   }
 
-  return (
-    <div className={`rgpd--banner`}>
-      <div className="rgpd--header">
+  console.log('showMiniBanner', showMiniBanner)
+  if (showMiniBanner) {
+    return (
+      <div className="rgpd--banner mini">
         <div className="rgpd--icon">{icon}</div>
-        <div className="rgpd--title">{titleBanner}</div>
+        <button
+          className="rgpd--btn"
+          onClick={() => {
+            setShowMiniBanner(false)
+          }}
+        >
+          {chooseLabel}
+        </button>
       </div>
-      <div className="rgpd--content">
-        {displayCookiesList ? (
-          <div className="rgpd--cookies-list">
-            {cookiesList.map((cookie, index) => {
-              const { publicName, publicDescription, key, type, mandatory } =
-                cookie
+    )
+  } else {
+    return (
+      <div className={`rgpd--banner full`}>
+        <div className="rgpd--header">
+          <div className="rgpd--icon">{icon}</div>
+          <div className="rgpd--title">{titleBanner}</div>
+        </div>
+        <div className="rgpd--content">
+          {displayCookiesList ? (
+            <div className="rgpd--cookies-list">
+              {cookiesList.map((cookie, index) => {
+                const { publicName, publicDescription, key, type, mandatory } =
+                  cookie
 
-              return (
-                <ul key={index} className="rgpd--cookie-item">
-                  <li>
-                    <div className="rgpd--cookie-name">
-                      {publicName}
-                      {mandatory && (
-                        <span className="rgpd--cookie-mandatory">
-                          {' '}
-                          ({mandatoryLabel})
-                        </span>
-                      )}
-                    </div>
-                    <div className="rgpd--cookie-description">
-                      {publicDescription}
-                    </div>
-                  </li>
-                  <li className="rgpd--cookie-type">{type}</li>
-                  <li className="rgpd--cookie-checkzone">
-                    <input
-                      type={`checkbox`}
-                      name={key}
-                      disabled={mandatory === true}
-                      checked={checked[key]}
-                      onChange={e => {
-                        setAcceptedCookie(key)
-                      }}
-                    />
-                  </li>
-                </ul>
-              )
-            })}
-          </div>
-        ) : (
-          <p dangerouslySetInnerHTML={{ __html: descriptionBanner }}></p>
-        )}
-      </div>
-      <div className="rgpd--footer">
-        {!displayCookiesList && (
+                return (
+                  <ul key={index} className="rgpd--cookie-item">
+                    <li>
+                      <div className="rgpd--cookie-name">
+                        {publicName}
+                        {mandatory && (
+                          <span className="rgpd--cookie-mandatory">
+                            {' '}
+                            ({mandatoryLabel})
+                          </span>
+                        )}
+                      </div>
+                      <div className="rgpd--cookie-description">
+                        {publicDescription}
+                      </div>
+                    </li>
+                    <li className="rgpd--cookie-type">{type}</li>
+                    <li className="rgpd--cookie-checkzone">
+                      <input
+                        type={`checkbox`}
+                        name={key}
+                        disabled={mandatory === true}
+                        checked={checked[key]}
+                        onChange={e => {
+                          setAcceptedCookie(key)
+                        }}
+                      />
+                    </li>
+                  </ul>
+                )
+              })}
+            </div>
+          ) : (
+            <p dangerouslySetInnerHTML={{ __html: descriptionBanner }}></p>
+          )}
+        </div>
+        <div className="rgpd--footer">
+          {!displayCookiesList && (
+            <button
+              className="rgpd--btn"
+              onClick={() => {
+                setDisplayCookiesList(!displayCookiesList)
+              }}
+            >
+              {chooseLabel}
+            </button>
+          )}
           <button
             className="rgpd--btn"
             onClick={() => {
-              setDisplayCookiesList(!displayCookiesList)
+              acceptAllCookies(cookiesList)
             }}
           >
-            {chooseLabel}
+            {acceptAllLabel}
           </button>
-        )}
-        <button
-          className="rgpd--btn"
-          onClick={() => {
-            acceptAllCookies(cookiesList)
-          }}
-        >
-          {acceptAllLabel}
-        </button>
-        <button
-          className="rgpd--btn"
-          onClick={() => {
-            acceptNoCookies(cookiesList)
-          }}
-        >
-          {rejectAllLabel}
-        </button>
-        {displayCookiesList && (
           <button
             className="rgpd--btn"
             onClick={() => {
-              acceptSomeCookies(cookiesList, checked)
+              acceptNoCookies(cookiesList)
             }}
           >
-            {saveLabel}
+            {rejectAllLabel}
           </button>
-        )}
+          {displayCookiesList && (
+            <button
+              className="rgpd--btn"
+              onClick={() => {
+                acceptSomeCookies(cookiesList, checked)
+              }}
+            >
+              {saveLabel}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 /**

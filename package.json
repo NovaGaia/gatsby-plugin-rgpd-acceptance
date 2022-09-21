@@ -13,6 +13,7 @@
   "author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
   "license": "MIT",
   "devDependencies": {
+    "auto-changelog": "^2.4.0",
     "release-it": "^15.4.2"
   }
 }

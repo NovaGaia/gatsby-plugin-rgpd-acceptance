@@ -5,19 +5,13 @@
   "main": "rgpd-acceptance.js",
   "module": "rgpd-acceptance.js",
   "files": [
-    "components",
-    "utils",
-    "styles",
+    "src",
     "gatsby-browser.js",
     "gatsby-node.js",
     "gatsby-ssr.js"
   ],
   "scripts": {
-    "build": "npm run prepare-css && babel src --out-dir . --ignore \"**/__tests__\"",
-    "watch": "npm run prepare-css && babel -w src --out-dir . --ignore \"**/__tests__\"",
-    "prepare": "cross-env NODE_ENV=production npm run build",
     "test:pack": "npm pack",
-    "prepare-css": "cp -r ./src/styles .",
     "release": "release-it"
   },
   "repository": {
@@ -28,7 +22,7 @@
     "gatsby",
     "gatsby-plugin",
     "RGPD",
-    "GDPR"
+    "GDPR","notice"
   ],
   "author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
   "license": "MIT",

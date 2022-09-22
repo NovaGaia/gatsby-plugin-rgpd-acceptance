@@ -2,8 +2,17 @@
   "name": "gatsby-plugin-rgpd-acceptance",
   "version": "2.0.2",
   "description": "A minimal plugin to add all tiers-scripts and accept them.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist.*",
+    "gatsby-browser.js",
+    "gasby-node.js",
+    "gatsby-ssr.js"
+  ],
   "scripts": {
+    "build": "babel src --out-dir ./dist --ignore \"**/__tests__\"",
+    "watch": "babel -w src --out-dir ./dist --ignore \"**/__tests__\"",
+    "prepare": "cross-env NODE_ENV=production npm run build",
     "release": "release-it"
   },
   "repository": {
@@ -23,7 +32,12 @@
   },
   "homepage": "https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance#readme",
   "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.1",
     "auto-changelog": "^2.4.0",
     "release-it": "^15.4.2"
+  },
+  "dependencies": {
+    "babel-preset-gatsby-package": "^2.23.0"
   }
 }

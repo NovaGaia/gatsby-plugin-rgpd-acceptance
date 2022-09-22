@@ -152,11 +152,11 @@ function acceptSomeCookies(cookiesList, checked) {
 /**
  * Method who checked if cookies duration are passed.
  * @param {*} cookiesList
- * @param {*} cookieDuration
+ * @param {*} cookieDuration in days
  */
 function resetAllAcceptanceByDate(cookiesList, cookieDuration) {
   if (!cookieDuration) {
-    cookieDuration = 31557600000
+    cookieDuration = 365
   }
   // console.log('resetAllAcceptanceByDate')
   // console.log('cookiesList', cookiesList)
@@ -165,7 +165,7 @@ function resetAllAcceptanceByDate(cookiesList, cookieDuration) {
   const acceptanceDate = new Date(_getAcceptanceDate()).valueOf()
   if (acceptanceDate === 0) return
   const diff = now - acceptanceDate
-  if (diff > cookieDuration) {
+  if (diff > cookieDuration * 86400000) {
     console.info(
       `The cookies have expired, they have been reset to ask for consent again.`
     )

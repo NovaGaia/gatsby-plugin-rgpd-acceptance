@@ -2,9 +2,10 @@
   "name": "gatsby-plugin-rgpd-acceptance",
   "version": "2.1.0",
   "description": "A minimal plugin to add all tiers-scripts and accept them.",
-  "main": "dist/index.js",
+  "main": "dist/rgpd-acceptance.js",
+  "module": "dist/rgpd-acceptance.js",
   "files": [
-    "dist.*",
+    "dist",
     "gatsby-browser.js",
     "gasby-node.js",
     "gatsby-ssr.js"

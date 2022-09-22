@@ -2,22 +2,29 @@
 
 ## Description
 
-Yet Another plugin to manage third party scripts, respecting the GDPR.
+Yet Another plugin to manage third-party scripts, respecting the GDPR.
 
-This plugin is not specific to one solution (e.g. Google Analytics, Facebook pixe, Youtube, etc.), it can use and drive them all.
+This plugin is not specific to one solution (e.g. Google Analytics, Facebook pixel, YouTube, etc.), it can use and drive them all.
 
-You just have to declare the whole script or a url to load.
+You just have to declare the whole script or an URL to load.
 
 > All `consents` datas are stored in `localStorage`.
 
 Two components are provided:
 
 - `RGPDCookieBanner` which is used to display and manage the acceptance.
-- `RGPDBlocker` which is used to prevent the loading of code (e.g. YouTube iframe, navgation map, playlist, etc.) if the person has not explicitly given his consent.
+- `RGPDBlocker` which is used to prevent the loading of code (e.g. YouTube iframe, navigation map, playlist, etc.) if the person has not explicitly given his consent.
 
 Two modes are proposed, one where the banner component is automatically added and a manual mode where you have to add it yourself.
 
 To use the manual mode, it in the `gatsby-config.js` plugin options. Change the value of `useInternalComponent` to `false`.
+
+| `RGPDCookieBanner`                                                                                                                      | `RGPDBlocker`                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Full version, not accepted:**![RGPDCookieBanner](./docs/SCR-20220922-gcg.png)                                                         | **Not accepted version:**<br/>![RGPDBlocker not accepted](./docs/SCR-20220922-gam.png) |
+| **Accepted version:**<br/>![RGPDCookieBanner mini](./docs/SCR-20220922-g5t.png)                                                         | **Accepted version:**<br/>![RGPDBlocker accepted](./docs/SCR-20220922-gb7.png)         |
+| **Choosing view without mandatory cookie:**<br/>![RGPDCookieBanner choosing view without mandatory cookie](./docs/SCR-20220922-gjx.png) |                                                                                        |
+| **Choosing view with mandatory cookie:**<br/>![RGPDCookieBanner choosing view with mandatory cookie](./docs/SCR-20220922-gyw.png)       |                                                                                        |
 
 ## How to install
 
@@ -32,7 +39,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-rgpd-acceptance`,
       options: {
-        cookieDuration: 31557600000, // Optionnal, default value: one year in milliseconds
+        cookieDuration: 365, // Optionnal, default value: one year in days
         useInternalCss: true, // Boolean Optionnal, default value: true
         useInternalComponent: true, // Boolean Optionnal, default value: true
         labels: {
@@ -40,12 +47,13 @@ module.exports = {
         },
         cookiesList: [
           // At least one is required (otherwise, what is the point of installing this plugin).
+          // See below for all explaination
           {
             key: `google-analitics`, // Required, your internal key
             publicName: `Google Analytics`, // Required, a Friendly Name
             publicDescription: `GA Description`, // Required, a Friendly Description
             type: `analytic`, // Required, a type/usage of script, chose one of them `ads|analytic|api|comment|other|social|support|video`
-            mandatory: false, // Boolean Required, set if this script is mandatory
+            mandatory: true, // Boolean Required, set if this script is mandatory
             urlToCall: `https://test.io`, // Optional (otherwise, enter `scriptToInclude`), the url of your script.
             scriptToInclude: `<script>console.info('Testing script is loaded')</script>`, // Optional (otherwise, enter `urlToCall`), the url of your script.
           },
@@ -57,22 +65,22 @@ module.exports = {
 }
 ```
 
-### Explaination of the `options`
+### Explanation of the `options`
 
 | Name                        | Default                                   | Description                                                                |
 | --------------------------- | ----------------------------------------- | -------------------------------------------------------------------------- |
 | `cookieDuration`            | 365                                       | How long the acceptance is still validate                                  |
 | `useInternalCss`            | true                                      | Active the internal demo style                                             |
-| `useInternalComponent`      | true                                      | Add automatically the `RGPDCookieBanner` componenent                       |
-| `labels`                    | {\*} Object                               | The differents labels of th `RGPDCookieBanner` componenent                 |
-| `labels.icon`               | 🍪                                        | The icon used in both version of `RGPDCookieBanner` componenent            |
+| `useInternalComponent`      | true                                      | Add automatically the `RGPDCookieBanner` component                         |
+| `labels`                    | {\*} Object                               | The different labels of the `RGPDCookieBanner` component                   |
+| `labels.icon`               | 🍪                                        | The icon used in both version of `RGPDCookieBanner` component              |
 | `labels.titleBanner`        | Les cookies                               | Title of the `RGPDCookieBanner`                                            |
 | `labels.descriptionBanner`  | Nous utilisons des cookies [...]          | Description text (complete text below) of the `RGPDCookieBanner`           |
 | `labels.acceptAllLabel`     | Accepter tout                             | Button label of `RGPDCookieBanner`                                         |
 | `labels.rejectAllLabel`     | Rejeter tout                              | Button label of `RGPDCookieBanner`                                         |
 | `labels.chooseLabel`        | Choisir                                   | Button label of `RGPDCookieBanner`                                         |
 | `labels.saveLabel`          | Enregistrer                               | Button label of `RGPDCookieBanner`                                         |
-| `labels.mandatoryLabel`     | obligatoire                               | information indicate the cookie is mandatory                               |
+| `labels.mandatoryLabel`     | obligatoire                               | information to indicate the cookie is mandatory                            |
 | `labels.blockerWarnLabel`   | Accepter                                  | Button label of `RGPDBlocker`                                              |
 | `labels.blockerWarnMessage` | Vous n'avez pas accepté les cookies [...] | Description text (complete text below) of the `RGPDBlocker`                |
 | `cookiesList`               | [\*] Array of objects                     | The configuration Array of each cookie, at least 1 is mandatory            |
@@ -80,8 +88,8 @@ module.exports = {
 | `publicName`                | -                                         | **Required**, a Friendly Name                                              |
 | `type`                      | -                                         | **Required**, a type/usage of script, chose one of them (list below)       |
 | `mandatory`                 | -                                         | `Boolean` **Required**, a set if this script is mandatory                  |
-| `urlToCall`                 | -                                         | **Optional**, (otherwise, enter `scriptToInclude`), the url of your script |
-| `scriptToInclude`           | -                                         | **Optional**, (otherwise, enter `urlToCall`), the url of your script       |
+| `urlToCall`                 | -                                         | **Optional**, (otherwise, enter `scriptToInclude`), the URL of your script |
+| `scriptToInclude`           | -                                         | **Optional**, (otherwise, enter `urlToCall`), the URL of your script       |
 
 > **`type` of cookie :**
 >
@@ -106,74 +114,48 @@ module.exports = {
 
 ### Design
 
-The design is intentionally horrible. So you can/should adapt it by disabling it in the `gatsby-config.js` plugin options. Change the value of `useInternalCss` to false
+The design is intentionally horrible. So, you can/should adapt it by disabling it in the `gatsby-config.js` plugin options. Change the value of `useInternalCss` to false
 
-Here are the css classes (the names speak for themselves)
+Here are the CSS classes (the names speak for themselves)
 
-If you set `useInternalCss` a `rgpd-acceptance-theme` class is added to `<html>`. So you don't need to put `!important` to override the predefined styles.
+If you set `useInternalCss` a `rgpd-acceptance-theme` class is added to `<html>`. So, you don't need to put `!important` to override the predefined styles.
 
-```css
+```CSS
 /* RGPDCookieBanner and his mini version component */
-.rgpd--container 
-
-.rgpd--banner 
-
-.rgpd--banner.full 
-
-.rgpd--banner.mini 
-
-.rgpd--container .rgpd--banner 
-
-.rgpd--header 
-
-.rgpd--icon 
-
-.rgpd--title 
-
-.rgpd--cookies-list
-
-.rgpd--cookie-item 
-
-.rgpd--cookie-name 
-
-.rgpd--cookie-description 
-
-.rgpd--cookie-type 
-
-.rgpd--cookie-mandatory 
-
-.rgpd--cookie-checkzone 
-
-.rgpd--footer 
-
-.rgpd--btn 
-
-.rgpd--btn.all 
-
-.rgpd--btn.some 
-
-.rgpd--btn.none 
-
-.rgpd--btn.choose 
-
-.rgpd--btn.save 
-
-.rgpd--link 
+.rgpd--container
+  .rgpd--banner
+  .rgpd--banner.full
+    .rgpd--header
+      .rgpd--icon
+      .rgpd--title
+    .rgpd--cookies-list
+      .rgpd--cookie-item
+        .rgpd--cookie-name
+        .rgpd--cookie-description
+        .rgpd--cookie-type
+        .rgpd--cookie-mandatory
+        .rgpd--cookie-checkzone
+     .rgpd--footer
+       .rgpd--btn
+       .rgpd--btn.all
+       .rgpd--btn.some
+       .rgpd--btn.none
+       .rgpd--btn.choose
+       .rgpd--btn.save
+  .rgpd--banner.mini
+    .rgpd--icon
+    .rgpd--link
 
 /* RGPDBlocker component */
-
-.rgpd--blocker--container 
-
-.rgpd--blocker--container .rgpd--icon 
-
-.rgpd--blocker--title 
-
-.rgpd--blocker--warn-message;
+.rgpd--blocker--container
+  .rgpd--blocker--container .rgpd--icon
+  .rgpd--blocker--title
+  .rgpd--blocker--warn-message
 ```
 
 ### Component `RGPDCookieBanner`
 
-If you set in `gatsby-config.js` the option `useInternalComponent` at `false` you can add it manualy in you layout.
+If you set in `gatsby-config.js` the option `useInternalComponent` at `false` you can add it manually in your layout.
 
 > It's **mandatory** if you need to translate labels with `i18n`. I you have only one language, you can directely set text in `gatsby-config.js`.
 
@@ -181,7 +163,7 @@ If you set in `gatsby-config.js` the option `useInternalComponent` at `false` yo
 import { RGPDCookieBanner } from 'gatsby-plugin-rgpd-acceptance'
 ```
 
-```comment
+```javascript
 /**
  * The pilot of acceptance
  * @param {*} icon `String` Emoji Override plugin or config label (eg. for i18n).
@@ -199,7 +181,13 @@ import { RGPDCookieBanner } from 'gatsby-plugin-rgpd-acceptance'
 
 ### Component `RGPDBlocker`
 
-```comment
+This component is used to block the loading of a child component that would require an acceptance validation.
+
+If he didn't get it, an alert message is displayed and he can directly accept it by clicking on a button.
+
+By implementing this system, you protect your users from tracking by the third party service used.
+
+```javascript
 /**
  * A component to block the loading of an unaccepted third party script.
  * @param {*} cookieKey `String` **Required**, your internal key, same as configured in `gatsby-config.js`
@@ -212,4 +200,10 @@ import { RGPDCookieBanner } from 'gatsby-plugin-rgpd-acceptance'
 
 ## How to contribute
 
+### Bugs and Features
+
 You can make enhancement requests, report bugs, or simply offer help at https://github.com/NovaGaia/gatsby-plugin-rgpd-acceptance/issues
+
+### Futur
+
+Create some plugins to facilitate the implemtation of a cookie script (like the others plugins who are specialized).

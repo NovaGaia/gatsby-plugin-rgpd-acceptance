@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-rgpd-acceptance",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "A minimal plugin to add all tiers-scripts and accept them.",
   "main": "rgpd-acceptance.js",
   "module": "rgpd-acceptance.js",
@@ -22,7 +22,8 @@
     "gatsby",
     "gatsby-plugin",
     "RGPD",
-    "GDPR","notice"
+    "GDPR",
+    "notice"
   ],
   "author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
   "license": "MIT",

@@ -5,10 +5,7 @@
   "main": "dist/rgpd-acceptance.js",
   "module": "dist/rgpd-acceptance.js",
   "files": [
-    "dist",
-    "gatsby-browser.js",
-    "gasby-node.js",
-    "gatsby-ssr.js"
+    "dist"
   ],
   "scripts": {
     "build": "babel src --out-dir ./dist --ignore \"**/__tests__\"",

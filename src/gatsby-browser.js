@@ -3,11 +3,11 @@
  *
  * See: https://www.gatsbyjs.com/docs/browser-apis/
  */
-import './src/styles/rgpd-acceptance.css'
+import './styles/rgpd-acceptance.css'
 
-import Banner from './src/components/Banner'
+import Banner from './components/Banner'
 import React from 'react'
-import { initRGPDPlugins } from './src/utils/gb'
+import { initRGPDPlugins } from './utils/gb'
 
 export const onRouteUpdate = ({ location }, pluginOptions = {}) => {
   initRGPDPlugins(`onRouteUpdate`, pluginOptions)
